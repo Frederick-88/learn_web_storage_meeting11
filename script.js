@@ -5,38 +5,63 @@ const addItemInHTML = (value) => {
         return;
     }
 
+    // LAMA
+    
+    // const daftarList = document.getElementsByClassName("daftar-list")
+    // const li = document.createElement("li")
+    // const content = document.createTextNode(value)
+
+    // daftarList[0].appendChild(li)
+    // li.appendChild(content)
+
+    // LAMA
+
     const daftarList = document.getElementsByClassName("daftar-list")
     const li = document.createElement("li")
-    const content = document.createTextNode(value)
+    const itemHTML = `${value} <button style="margin: 10px;">hapus</button> `;
 
     daftarList[0].appendChild(li)
-    li.appendChild(content)
+    li.innerHTML = itemHTML
 }
 
 const addItem = () => {
     const itemInput = document.getElementsByName("itemInput")
-    // console.log(itemInput[0].value);
-    let value = itemInput[0].value;
+    // pengecekan klau inputnya kosong, maka no input
+    let itemInputValue = itemInput[0].value;
+    if (!itemInputValue){
+        return;
+    }
+     // pengecekan klau inputnya kosong, maka no input
    
-    addItemInHTML(itemInput)
+    addItemInHTML(itemInputValue)
     let itemArray = localStorage.getItem("item");
-    if ((typeof itemArray) == "string" || (itemArray == null)){
-        itemArray = (itemInput)
+
+    if (itemArray == null){
+        itemArray = [itemInputValue]
     } else{
-        itemArray.push(itemInput)
+        itemArray = JSON.parse(itemArray);
+        itemArray.push(itemInputValue)
     }
 
     const itemArrayStringify = JSON.stringify(itemArray);
     localStorage.setItem("item", itemArrayStringify);
 
-    // debugger;
+    // habis input gaada sisa
+    itemInput[0].value = ""
+    // habis input gaada sisa
 
 }
 
 const runNow = () => {
-   const item = localStorage.getItem("item")
+   const itemFromLS = localStorage.getItem("item")
 
-   addItemInHTML(item)
+   if(itemFromLS != null){
+       const itemParsed = JSON.parse(itemFromLS);
+       itemParsed.forEach( item => {
+           addItemInHTML (item)
+       })
+   }
+
 }
 
 runNow();
